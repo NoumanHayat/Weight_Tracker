@@ -11,6 +11,7 @@ import { COLORS } from '../../../constants';
 import Dashboard from './dashboard';
 import Graph from './graph';
 import History from './history';
+import Setting from './setting';
 function HomeScreen({ route }) {
   console.log(route.name);
   return (
@@ -50,11 +51,11 @@ export default function App() {
         },
 
       })}
-      initialRouteName="History" >
+      initialRouteName="Setting" >
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Graph" component={Graph} />
       <Tab.Screen name="History" component={History} />
-      <Tab.Screen name="Setting" component={HomeScreen} />
+      <Tab.Screen name="Setting" component={Setting} />
     </Tab.Navigator>
   );
 }

@@ -19,29 +19,26 @@ import ModalLayout from '../../../components/ModalLayout';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { RadioButton } from 'react-native-paper';
+import ScreenHader from '../../../components/ScreenHader';
 
 const Screen = ({ navigation }) => {
     const [visible, setVisible] = useState(false);
     const [selected, setSelected] = useState('');
     const [height, setHeight] = useState(0);
     const [waist, setWaist] = useState(0);
+    const [heightScale, setHeightScale] = React.useState('Cm');
+    const [weightScale, setWeightScale] = React.useState('pound');
     const data = [
         { key: '1', value: 'Male' },
         { key: '2', value: 'Female' },
         { key: '3', value: 'Other' },
     ];
-    const [heightScale, setHeightScale] = React.useState('Cm');
-    const [weightScale, setWeightScale] = React.useState('pound');
     const [gender, setGender] = useState('Male');
     return (
         <Container>
-            <View style={styles.viewLogo}>
-                <Image source={images.logo} style={styles.logo} />
-                <Text style={{ color: '#3D2645', fontSize: 12 }}>Weight & BMI tracker</Text>
-            </View>
+            <ScreenHader title="Change Personal info" navigation={navigation} onlyBack={true} />
             <View style={styles.container}>
-                <Text style={styles.hiText}>Hello!</Text>
-                <Text style={styles.textTwo}>Please Provide your info</Text>
+                <Text style={styles.textTwo}>Please Provide your new info</Text>
                 <View style={{ flexDirection: 'row', width: '100%' }}>
                     <View style={{ marginRight: 5, ...styles.textBoxSignSmall }}>
                         <TextInput
@@ -95,24 +92,8 @@ const Screen = ({ navigation }) => {
 
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.titleTwo}>Date of Birth</Text>
-                <TouchableOpacity onPress={() => { setVisible(true); }}>
-                    <View style={styles.textBoxSign}>
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            marginLeft: '10%'
-                        }}>
-                            <Text style={{ fontSize: 14, color: 'gray' }}>1st , October 222</Text>
-                        </View>
-                        <View style={styles.icons}>
-                            <AntDesign name="calendar" size={16} color="black" />
-                        </View>
-
-                    </View>
-                </TouchableOpacity>
                 <Text style={styles.titleTwo}>Select Height Scale</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' ,justifyContent:'space-around'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                         <RadioButton
@@ -132,8 +113,9 @@ const Screen = ({ navigation }) => {
                         <Text>Cm</Text>
                     </View>
                 </View>
+
                 <Text style={styles.titleTwo}>Select Weight Scale</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' ,justifyContent:'space-around'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                         <RadioButton
@@ -155,42 +137,34 @@ const Screen = ({ navigation }) => {
                 </View>
                 <Text style={styles.titleTwo}>Height</Text>
                 <AppInputNumber onChangeText={e => {
-                    if (e.match(/[^0-9]/g) === null) {
-                        setHeight(e);
-                    } else {
-                        alert('Please Enter Number Only');
-                    }
-                }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in '+heightScale} />
+                    setHeight(e);
+                }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in ' + heightScale} />
                 <Text style={styles.titleTwo}>Waist</Text>
                 <AppInputNumber onChangeText={e => {
-                    if (e.match(/[^0-9]/g) === null) {
-                        setWaist(e);
-                    } else {
-                        alert('Please Enter Number Only');
-                    }
-                }} icon={<Entypo name="cycle" size={24} color="black" />} defaultValue={'Waist in '+heightScale+" (Optional)"} />
+                    setWaist(e);
+                }} icon={<Entypo name="cycle" size={24} color="black" />} defaultValue={'Waist in ' + heightScale + " (Optional)"} />
                 <Text style={styles.titleTwo}>Gender</Text>
-                    <View>
-                        <SelectList
-                            setSelected={(val) => setGender(val)}
-                            data={data}
-                            placeholder="Male"
-                            inputStyles={{color: 'gray'}}
-                            dropdownTextStyles={{color: 'black'}}
-                            boxStyles={styles.dropdownBox}
-                            save="value"
-                            search={false}
-                            searchPlaceholder={'Selected'}
-                            arrowicon={<View >
-                                <Feather name="chevron-down" size={24} color="black" />
-                            </View>
-                            }
-                        />
-                    </View>
+                <View>
+                    <SelectList
+                        setSelected={(val) => setGender(val)}
+                        data={data}
+                        placeholder="Male"
+                        inputStyles={{ color: 'gray' }}
+                        dropdownTextStyles={{ color: 'black' }}
+                        boxStyles={styles.dropdownBox}
+                        save="value"
+                        search={false}
+                        searchPlaceholder={'Selected'}
+                        arrowicon={<View >
+                            <Feather name="chevron-down" size={24} color="black" />
+                        </View>
+                        }
+                    />
+                </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }} >
                     <AppButton
-                        onPress={() => { navigation.push('TargetWeight'); }}
-                        text="Continue"
+                        onPress={() => { navigation.push(''); }}
+                        text="Change"
                         style={{
                             width: '100%',
                             marginTop: 30,
@@ -215,6 +189,7 @@ const Screen = ({ navigation }) => {
                     <View style={{ justifyContent: 'center', alignItems: 'center', width: 276 }}>
                         <View>
                             <Calendar
+                                current={'2010-03-01'}
                                 onDayPress={day => {
                                     setSelected(day.dateString);
                                 }}
@@ -242,8 +217,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: COLORS.white,
         marginBottom: 0,
-        borderWidth:0,
-        borderColor:'white',
+        borderWidth: 0,
+        borderColor: 'white',
     },
     icons: {
         flex: 0.1, justifyContent: 'center', alignItems: 'center', margin: 10

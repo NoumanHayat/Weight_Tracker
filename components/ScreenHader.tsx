@@ -7,11 +7,11 @@ export default function ScreenHeader({ navigation, title, style }: any) {
   return (
     <View
       style={{
-        height: 55,
+        // height: 55,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginVertical: 45,
+        marginVertical: 15,
         ...style,
         // backgroundColor: COLORS.white,
       }}>

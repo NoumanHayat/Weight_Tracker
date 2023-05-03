@@ -23,6 +23,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import login from './code/screen/login/name';
 import dashboard from './code/screen/dashboard';
 import TargetWeight from './code/screen/login/targetWeight';
+import ChangePersonalInfo from './code/screen/dashboard/changePersonalInfo';
 const Stack = createNativeStackNavigator();
 function App() {
   return (
@@ -32,10 +33,14 @@ function App() {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="dashboard">
+        initialRouteName="SignUp">
         <Stack.Screen name="SignUp" component={login} />
         <Stack.Screen name="dashboard" component={dashboard} />
         <Stack.Screen name="TargetWeight" component={TargetWeight} />
+        <Stack.Screen
+          name="ChangePersonalInfo"
+          component={ChangePersonalInfo}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

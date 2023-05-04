@@ -11,8 +11,12 @@ import {
 import { COLORS, GRADIENTS } from '../../../constants';
 import IntroButton from '../../../components/AppButton';
 import Container from '../../../components/Container';
-const Screen = ({ navigation }) => {
+import { useData } from '../../hooks';
+
+const Screen = ({ navigation, route }) => {
+    console.log(route);
     const [values, setValue] = useState(15);
+    const { SaveProfile } = useData();
     return (
         <Container>
             <View style={styles.mainView}>
@@ -24,7 +28,7 @@ const Screen = ({ navigation }) => {
                                 fontSize: 20,
                                 textAlign: 'center',
                             }}>
-                            Please Enter your target weight in KG?
+                            Please Enter your target weight in {route.params[5]}?
                         </Text>
                     </View>
                     <View
@@ -35,9 +39,9 @@ const Screen = ({ navigation }) => {
                         }}>
                         <View style={styles.textBoxSign}>
                             <TextInput
-                                placeholder="00 KG"
+                                placeholder={"00 " +  route.params[5] }
                                 placeholderTextColor={'white'}
-                                //   onChangeText={(value) => setEmail(value)}
+                                onChangeText={(value) => setValue(parseInt(value))}
                                 keyboardType="numeric"
                                 autoCapitalize={'none'}
                                 style={{
@@ -67,8 +71,13 @@ const Screen = ({ navigation }) => {
                             marginTop: 0,
                         }}
                         textStyle={{ color: COLORS.white, letterSpacing: 2, fontSize: 16 }}
-                        onPress={() => {
-                            navigation.push('dashboard');
+                        onPress={async () => {
+                            const response = await SaveProfile(values,...route.params);
+                            if(response){
+
+                            }else{
+                                alert('Unable to save Data')
+                            }
                         }}
                     />
                 </View>

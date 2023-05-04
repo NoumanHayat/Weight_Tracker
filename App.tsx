@@ -24,8 +24,9 @@ import login from './code/screen/login/name';
 import dashboard from './code/screen/dashboard';
 import TargetWeight from './code/screen/login/targetWeight';
 import ChangePersonalInfo from './code/screen/dashboard/changePersonalInfo';
+import {DataProvider} from './code/hooks';
 const Stack = createNativeStackNavigator();
-function App() {
+function AppStarting() {
   return (
     <NavigationContainer>
       {/* <StatusBar barStyle="dark-content" backgroundColor={'black'} /> */}
@@ -45,4 +46,10 @@ function App() {
     </NavigationContainer>
   );
 }
-export default App;
+export default function App() {
+  return (
+    <DataProvider>
+      <AppStarting />
+    </DataProvider>
+  );
+}

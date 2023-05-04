@@ -21,8 +21,10 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import { RadioButton } from 'react-native-paper';
 
 const Screen = ({ navigation }) => {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [visible, setVisible] = useState(false);
-    const [selected, setSelected] = useState('');
+    const [selected, setSelected] = useState('2010-03-01');
     const [height, setHeight] = useState(0);
     const [waist, setWaist] = useState(0);
     const data = [
@@ -48,6 +50,7 @@ const Screen = ({ navigation }) => {
                             placeholder="First name"
                             placeholderTextColor='gray'
                             autoCapitalize={'none'}
+                            onChangeText={(v) => { setFirstName(v) }}
                             style={{
                                 flex: 1,
                                 height: 'auto',
@@ -65,6 +68,7 @@ const Screen = ({ navigation }) => {
                             placeholder="Last name"
                             placeholderTextColor='gray'
                             autoCapitalize={'none'}
+                            onChangeText={(v) => { setLastName(v) }}
                             style={{
                                 flex: 1,
                                 height: 'auto',
@@ -87,23 +91,7 @@ const Screen = ({ navigation }) => {
                             justifyContent: 'center',
                             marginLeft: '10%'
                         }}>
-                            <Text style={{ fontSize: 14, color: 'gray' }}>1st , October 222</Text>
-                        </View>
-                        <View style={styles.icons}>
-                            <AntDesign name="calendar" size={16} color="black" />
-                        </View>
-
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.titleTwo}>Date of Birth</Text>
-                <TouchableOpacity onPress={() => { setVisible(true); }}>
-                    <View style={styles.textBoxSign}>
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            marginLeft: '10%'
-                        }}>
-                            <Text style={{ fontSize: 14, color: 'gray' }}>1st , October 222</Text>
+                            <Text style={{ fontSize: 14, color: 'gray' }}>{selected}</Text>
                         </View>
                         <View style={styles.icons}>
                             <AntDesign name="calendar" size={16} color="black" />
@@ -112,7 +100,7 @@ const Screen = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.titleTwo}>Select Height Scale</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' ,justifyContent:'space-around'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                         <RadioButton
@@ -133,7 +121,7 @@ const Screen = ({ navigation }) => {
                     </View>
                 </View>
                 <Text style={styles.titleTwo}>Select Weight Scale</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' ,justifyContent:'space-around'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                         <RadioButton
@@ -155,41 +143,40 @@ const Screen = ({ navigation }) => {
                 </View>
                 <Text style={styles.titleTwo}>Height</Text>
                 <AppInputNumber onChangeText={e => {
-                    if (e.match(/[^0-9]/g) === null) {
-                        setHeight(e);
-                    } else {
-                        alert('Please Enter Number Only');
-                    }
-                }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in '+heightScale} />
-                <Text style={styles.titleTwo}>Waist</Text>
-                <AppInputNumber onChangeText={e => {
-                    if (e.match(/[^0-9]/g) === null) {
-                        setWaist(e);
-                    } else {
-                        alert('Please Enter Number Only');
-                    }
-                }} icon={<Entypo name="cycle" size={24} color="black" />} defaultValue={'Waist in '+heightScale+" (Optional)"} />
+                    setHeight(e);
+                }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in ' + heightScale} />
                 <Text style={styles.titleTwo}>Gender</Text>
-                    <View>
-                        <SelectList
-                            setSelected={(val) => setGender(val)}
-                            data={data}
-                            placeholder="Male"
-                            inputStyles={{color: 'gray'}}
-                            dropdownTextStyles={{color: 'black'}}
-                            boxStyles={styles.dropdownBox}
-                            save="value"
-                            search={false}
-                            searchPlaceholder={'Selected'}
-                            arrowicon={<View >
-                                <Feather name="chevron-down" size={24} color="black" />
-                            </View>
-                            }
-                        />
-                    </View>
+                <View>
+                    <SelectList
+                        setSelected={(val) => setGender(val)}
+                        data={data}
+                        placeholder="Male"
+                        inputStyles={{ color: 'gray' }}
+                        dropdownTextStyles={{ color: 'black' }}
+                        boxStyles={styles.dropdownBox}
+                        save="value"
+                        search={false}
+                        searchPlaceholder={'Selected'}
+                        arrowicon={<View >
+                            <Feather name="chevron-down" size={24} color="black" />
+                        </View>
+                        }
+                    />
+                </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }} >
                     <AppButton
-                        onPress={() => { navigation.push('TargetWeight'); }}
+                        onPress={() => { 
+                            // navigation.push('TargetWeight'); 
+                            console.log(firstName+lastName+height);
+                            console.log(selected+heightScale+weightScale+gender)
+
+                            if(firstName!=='' && lastName!=='' && height!==0){
+                                navigation.push('TargetWeight',[firstName,lastName,height,selected,heightScale,weightScale,gender]); 
+                            }else{
+                                alert('Please Provide your information');
+                            }
+
+                        }}
                         text="Continue"
                         style={{
                             width: '100%',
@@ -215,6 +202,7 @@ const Screen = ({ navigation }) => {
                     <View style={{ justifyContent: 'center', alignItems: 'center', width: 276 }}>
                         <View>
                             <Calendar
+                                current={'2010-03-01'}
                                 onDayPress={day => {
                                     setSelected(day.dateString);
                                 }}
@@ -242,8 +230,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: COLORS.white,
         marginBottom: 0,
-        borderWidth:0,
-        borderColor:'white',
+        borderWidth: 0,
+        borderColor: 'white',
     },
     icons: {
         flex: 0.1, justifyContent: 'center', alignItems: 'center', margin: 10

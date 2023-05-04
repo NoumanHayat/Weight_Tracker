@@ -75,7 +75,7 @@ const Screen = ({ navigation, route }) => {
                             if ((route.params[5] === 'KG' && values > 30 && values < 170) || (route.params[5] !== 'KG' && values > 30 * 0.453592 && values < 170 * 0.453592)) {
                                 const response = await SaveProfile(values, ...route.params);
                                 if (response) {
-                                    navigation.push('dashboard');
+                                    navigation.push('dashboardTab');
 
                                 } else {
                                     alert('Unable to save Data')

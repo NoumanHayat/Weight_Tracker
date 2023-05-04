@@ -51,7 +51,7 @@ export default function App() {
         },
 
       })}
-      initialRouteName="Setting" >
+      initialRouteName="Dashboard" >
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Graph" component={Graph} />
       <Tab.Screen name="History" component={History} />

@@ -21,7 +21,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Container from './components/Container';
 import {NavigationContainer} from '@react-navigation/native';
 import login from './code/screen/login/name';
-import dashboard from './code/screen/dashboard';
+import dashboardTab from './code/screen/dashboard';
 import TargetWeight from './code/screen/login/targetWeight';
 import ChangePersonalInfo from './code/screen/dashboard/changePersonalInfo';
 import {DataProvider} from './code/hooks';
@@ -34,9 +34,9 @@ function AppStarting() {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="SignUp">
+        initialRouteName="dashboardTab">
         <Stack.Screen name="SignUp" component={login} />
-        <Stack.Screen name="dashboard" component={dashboard} />
+        <Stack.Screen name="dashboardTab" component={dashboardTab} />
         <Stack.Screen name="TargetWeight" component={TargetWeight} />
         <Stack.Screen
           name="ChangePersonalInfo"

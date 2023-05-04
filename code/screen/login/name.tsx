@@ -6,14 +6,14 @@ import { View, Text, StyleSheet, Image, TextInput, Modal, TouchableOpacity } fro
 import { images, COLORS, icons } from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons  from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppButton from '../../../components/AppButton';
 import ScreenHeader from '../../../components/ScreenHader';
 import AppInput from '../../../components/AppInput';
 import AppInputNumber from '../../../components/AppInputNumber';
 import Container from '../../../components/Container';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
 import ModalLayout from '../../../components/ModalLayout';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
@@ -34,6 +34,7 @@ const Screen = ({ navigation }) => {
     ];
     const [heightScale, setHeightScale] = React.useState('Cm');
     const [weightScale, setWeightScale] = React.useState('pound');
+    const [weight, setWeight] = React.useState(0);
     const [gender, setGender] = useState('Male');
     return (
         <Container>
@@ -145,6 +146,11 @@ const Screen = ({ navigation }) => {
                 <AppInputNumber onChangeText={e => {
                     setHeight(e);
                 }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in ' + heightScale} />
+                <Text style={styles.titleTwo}>Weight</Text>
+                <AppInputNumber onChangeText={e => {
+                    setWeight(e);
+                }} icon={<MaterialCommunityIcons name="weight" size={24} color="black" />} defaultValue={'Weight in ' + weightScale} />
+                
                 <Text style={styles.titleTwo}>Gender</Text>
                 <View>
                     <SelectList
@@ -165,15 +171,22 @@ const Screen = ({ navigation }) => {
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }} >
                     <AppButton
-                        onPress={() => { 
+                        onPress={() => {
 
-                            if( (heightScale==='Inches' && height>35 && height < 108) ||  (heightScale !=='Inches' && height>(35* 2.54) && height < (108* 2.54))   ){       
-                                if(firstName!=='' && lastName!=='' && height!==0){
-                                    navigation.push('TargetWeight',[firstName,lastName,height,selected,heightScale,weightScale,gender]); 
+                            if ((heightScale === 'Inches' && height > 35 && height < 108) || (heightScale !== 'Inches' && height > (35 * 2.54) && height < (108 * 2.54))) {
+
+                                if ((weightScale === 'KG' && weight > 30 && weight < 170) || (weightScale !== 'KG' && weight > 30 * 0.453592 && weight < 170 * 0.453592)) {
+
+
+                                    if (firstName !== '' && lastName !== '' && height !== 0) {
+                                        navigation.push('TargetWeight', [firstName, lastName, height, selected, heightScale, weightScale, gender,weight]);
+                                    } else {
+                                        alert('Please Provide your information');
+                                    }
                                 }else{
-                                    alert('Please Provide your information');
+                                    alert('Please provide your weight')
                                 }
-                            }else{
+                            } else {
                                 alert('Please provide valid height');
                             }
 
@@ -181,7 +194,7 @@ const Screen = ({ navigation }) => {
 
 
 
-                            
+
 
                         }}
                         text="Continue"

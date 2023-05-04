@@ -39,7 +39,7 @@ const Screen = ({ navigation, route }) => {
                         }}>
                         <View style={styles.textBoxSign}>
                             <TextInput
-                                placeholder={"00 " +  route.params[5] }
+                                placeholder={"00 " + route.params[5]}
                                 placeholderTextColor={'white'}
                                 onChangeText={(value) => setValue(parseInt(value))}
                                 keyboardType="numeric"
@@ -72,11 +72,16 @@ const Screen = ({ navigation, route }) => {
                         }}
                         textStyle={{ color: COLORS.white, letterSpacing: 2, fontSize: 16 }}
                         onPress={async () => {
-                            const response = await SaveProfile(values,...route.params);
-                            if(response){
+                            if ((route.params[5] === 'KG' && values > 30 && values < 170) || (route.params[5] !== 'KG' && values > 30 * 0.453592 && values < 170 * 0.453592)) {
+                                const response = await SaveProfile(values, ...route.params);
+                                if (response) {
+                                    navigation.push('dashboard');
 
-                            }else{
-                                alert('Unable to save Data')
+                                } else {
+                                    alert('Unable to save Data')
+                                }
+                            } else {
+                                alert('Provide valid target Weight')
                             }
                         }}
                     />

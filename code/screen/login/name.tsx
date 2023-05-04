@@ -166,15 +166,22 @@ const Screen = ({ navigation }) => {
                 <View style={{ justifyContent: 'center', alignItems: 'center' }} >
                     <AppButton
                         onPress={() => { 
-                            // navigation.push('TargetWeight'); 
-                            console.log(firstName+lastName+height);
-                            console.log(selected+heightScale+weightScale+gender)
 
-                            if(firstName!=='' && lastName!=='' && height!==0){
-                                navigation.push('TargetWeight',[firstName,lastName,height,selected,heightScale,weightScale,gender]); 
+                            if( (heightScale==='Inches' && height>35 && height < 108) ||  (heightScale !=='Inches' && height>(35* 2.54) && height < (108* 2.54))   ){       
+                                if(firstName!=='' && lastName!=='' && height!==0){
+                                    navigation.push('TargetWeight',[firstName,lastName,height,selected,heightScale,weightScale,gender]); 
+                                }else{
+                                    alert('Please Provide your information');
+                                }
                             }else{
-                                alert('Please Provide your information');
+                                alert('Please provide valid height');
                             }
+
+
+
+
+
+                            
 
                         }}
                         text="Continue"

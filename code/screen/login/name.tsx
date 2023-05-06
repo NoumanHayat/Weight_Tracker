@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, Image, TextInput, Modal, TouchableOpacity } fro
 import { images, COLORS, icons } from '../../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons  from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppButton from '../../../components/AppButton';
 import ScreenHeader from '../../../components/ScreenHader';
 import AppInput from '../../../components/AppInput';
@@ -24,7 +24,7 @@ const Screen = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [visible, setVisible] = useState(false);
-    const [selected, setSelected] = useState('2010-03-01');
+    const [selected, setSelected] = useState(0);
     const [height, setHeight] = useState(0);
     const [waist, setWaist] = useState(0);
     const data = [
@@ -84,22 +84,14 @@ const Screen = ({ navigation }) => {
                         />
                     </View>
                 </View>
-                <Text style={styles.titleTwo}>Date of Birth</Text>
-                <TouchableOpacity onPress={() => { setVisible(true); }}>
-                    <View style={styles.textBoxSign}>
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            marginLeft: '10%'
-                        }}>
-                            <Text style={{ fontSize: 14, color: 'gray' }}>{selected}</Text>
-                        </View>
-                        <View style={styles.icons}>
-                            <AntDesign name="calendar" size={16} color="black" />
-                        </View>
-
-                    </View>
-                </TouchableOpacity>
+                <Text style={styles.titleTwo}>your Age (ony year)</Text>
+                <AppInputNumber onChangeText={e => {
+                    if (e.match(/[^0-9]/g) === null) {
+                        setSelected(e);
+                    } else {
+                        alert('Please Enter Number Only');
+                    }
+                }} defaultValue={"age"} />
                 <Text style={styles.titleTwo}>Select Height Scale</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -150,7 +142,7 @@ const Screen = ({ navigation }) => {
                 <AppInputNumber onChangeText={e => {
                     setWeight(e);
                 }} icon={<MaterialCommunityIcons name="weight" size={24} color="black" />} defaultValue={'Weight in ' + weightScale} />
-                
+
                 <Text style={styles.titleTwo}>Gender</Text>
                 <View>
                     <SelectList
@@ -175,15 +167,15 @@ const Screen = ({ navigation }) => {
 
                             if ((heightScale === 'Inches' && height > 35 && height < 108) || (heightScale !== 'Inches' && height > (35 * 2.54) && height < (108 * 2.54))) {
 
-                                if ((weightScale === 'KG' && weight > 30 && weight < 170) || (weightScale !== 'KG' && weight > 30 * 0.453592 && weight < 170 * 0.453592)) {
+                                if ((weightScale === 'KG' && weight > 30 && weight < 170) || (weightScale !== 'KG' && weight > 30 / 0.453592 && weight < 170 / 0.453592)) {
 
 
                                     if (firstName !== '' && lastName !== '' && height !== 0) {
-                                        navigation.push('TargetWeight', [firstName, lastName, height, selected, heightScale, weightScale, gender,weight]);
+                                        navigation.push('TargetWeight', [firstName, lastName, height, selected, heightScale, weightScale, gender, weight]);
                                     } else {
                                         alert('Please Provide your information');
                                     }
-                                }else{
+                                } else {
                                     alert('Please provide your weight')
                                 }
                             } else {
@@ -206,7 +198,7 @@ const Screen = ({ navigation }) => {
                     />
                 </View>
             </View>
-            <Modal
+            {/* <Modal
                 animationType={'fade'}
                 transparent={true}
                 visible={visible}
@@ -233,7 +225,7 @@ const Screen = ({ navigation }) => {
                         </View>
                     </View>
                 </ModalLayout>
-            </Modal>
+            </Modal> */}
         </Container>
     );
 };

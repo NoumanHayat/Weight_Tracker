@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 import React, { useContext, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const DataContext = React.createContext({});
@@ -11,20 +13,19 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     firstName: any,
     lastName: any,
     height: any,
-    DOB: any,
+    age: any,
     heightScale: any,
     weightScale: any,
     gender: any,
     initialWeight: any,
   ) => {
-    console.log('Saving profile');
     const d = new Date().toISOString();
     // Inches default
-    // KG default
+    // pound default
 
-    if (weightScale !== 'KG') {
-      TargetWeight = TargetWeight * 0.453592;
-      initialWeight = initialWeight * 0.453592;
+    if (weightScale !== 'pound') {
+      TargetWeight = TargetWeight / 0.453592;
+      initialWeight = initialWeight / 0.453592;
     }
     if (heightScale !== 'Inches') {
       height = height * 2.54;
@@ -34,7 +35,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       firstName,
       lastName,
       height,
-      DOB,
+      age,
       heightScale,
       weightScale,
       gender,
@@ -46,7 +47,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       await AsyncStorage.setItem(
         'weightLog',
         JSON.stringify([
-          {date: d.slice(0, 10), weight: initialWeight, weightChange: 0},
+          { date: d.slice(0, 10), weight: initialWeight, weightChange: 0 },
         ]),
       );
     } catch (error) {
@@ -59,16 +60,40 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (e) {
       return false;
     }
-    // try {
-    //   const jsonString = await AsyncStorage.getItem('myProfile');
-    //   const data = jsonString != null ? JSON.parse(jsonString) : {};
-    //   console.log('Retrieved data:', data);
-    // } catch (e) {
-    //   console.error('Error retrieving data:', e);
-    // }
   };
+  const getProfile = async () => {
+    let Data = [];
+    let profileData = [];
+    let weightLogData = [];
+    try {
+      const myArrayProfile = await AsyncStorage.getItem('myProfile');
+      if (myArrayProfile !== null) {
+        // We have data!!
+        profileData = JSON.parse(myArrayProfile);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      // Error retrieving data
+      return null;
+    }
 
-  const DashboardData = async (NewWeight) => {
+    try {
+      const myArray = await AsyncStorage.getItem('weightLog');
+      if (myArray !== null) {
+        // We have data!!
+        weightLogData = JSON.parse(myArray);
+      } else {
+        console.log('Error');
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log('Error retrieving data');
+    }
+
+    return { profileData, weightLogData };
+  };
+  const AddWeight = async NewWeight => {
     const d = new Date().toISOString();
     let Data = [];
     try {
@@ -76,7 +101,6 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       if (myArray !== null) {
         // We have data!!
         Data = JSON.parse(myArray);
-        console.log(Data);
       } else {
         console.log('Error');
       }
@@ -93,11 +117,94 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     try {
-      await AsyncStorage.setItem('weightLog', JSON.stringify([Data]));
+      await AsyncStorage.setItem('weightLog', JSON.stringify(Data));
     } catch (error) {
       // Error saving data
       console.log('Error saving data');
     }
+  };
+  const DashboardData = async () => {
+    //     A BMI of less than 18.5 means a person is underweight.
+    // A BMI of between 18.5 and 24.9 is ideal.
+    // A BMI of between 25 and 29.9 is overweight.
+    // A BMI over 30 indicates obesity.
+    //     Activity level	Male body type	Female body type
+    // Athletes	6–13%	14–20%
+    // Fit non-athletes	14–17%	21–24%
+    // Acceptable	18–24%	25–31%
+    // Obesity	25% or more	32% or more
+
+    //     Underweight	Less than 18.5
+    // Normal weight	18.5–24.9
+    // Overweight	25–29.9
+    // Obesity	30 or greater
+
+    //suggested weight calculator
+    //58      (x-58)*3 --- (x-58)*4+115
+    let profile = await getProfile();
+    const latestWeightLog =
+      profile?.weightLogData[profile.weightLogData.length - 1];
+    const bmi =
+      (latestWeightLog.weight /
+        ([profile?.profileData.height] * [profile?.profileData.height])) *
+      703;
+    let suggestedWeightStart =
+      profile?.profileData.gender === 'Male'
+        ? (profile?.profileData.height - 58) * 3 + 91 + 12
+        : (profile?.profileData.height - 58) * 3 + 91;
+    let suggestedWeightEnd =
+      profile?.profileData.gender === 'Male'
+        ? (profile?.profileData.height - 58) * 4 + 115 + 12
+        : (profile?.profileData.height - 58) * 4 + 115;
+
+
+    let weightStatus = '';
+
+    if (bmi > 39) {
+      weightStatus = 'Severe obesity';
+    } else if (bmi > 30) {
+      weightStatus = 'Obesity';
+    } else if (bmi > 25) {
+      weightStatus = 'Overweight';
+    } else if (bmi > 19) {
+      weightStatus = 'Normal weight';
+    } else {
+      weightStatus = 'Under weighted';
+    }
+
+    let weightChange = profile?.profileData.initialWeight - latestWeightLog.weight
+    let response = {};
+
+    if (profile?.profileData.weightScale == 'KG') {
+      response = {
+        weightStatus: weightStatus,
+        bmi,
+        suggestedWeight: {
+          down: parseInt(suggestedWeightStart * 0.453592),
+          up: parseInt(suggestedWeightEnd * 0.453592)
+        },
+        latestWeightLog:  {"date": latestWeightLog.Date, "weight": parseInt(latestWeightLog.weight* 0.453592), "weightChange": 0},
+        // profile: profile?.profileData,
+        profile: {"TargetWeight": parseInt(profile?.profileData.TargetWeight* 0.453592), "age": "24", "firstName": "Nouman", "gender": "Male", "height": "68", "heightScale": "Inches", "initialWeight": parseInt(profile?.profileData.initialWeight* 0.453592), "lastName": "Hayat", "weightScale": "KG"},
+        weightChange: parseInt(weightChange* 0.453592),
+      }
+    } else {
+      response = {
+        weightStatus: weightStatus,
+        bmi,
+        suggestedWeight: {
+          down: suggestedWeightStart,
+          up: suggestedWeightEnd
+        },
+        latestWeightLog: latestWeightLog,
+        profile: profile?.profileData,
+        weightChange: weightChange,
+      }
+    }
+    // const bmi =kg/m2;
+
+    console.log(response)
+    return response;
   };
   const contextValue = {
     SaveProfile,

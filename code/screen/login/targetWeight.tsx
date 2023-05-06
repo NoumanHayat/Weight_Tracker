@@ -72,7 +72,7 @@ const Screen = ({ navigation, route }) => {
                         }}
                         textStyle={{ color: COLORS.white, letterSpacing: 2, fontSize: 16 }}
                         onPress={async () => {
-                            if ((route.params[5] === 'KG' && values > 30 && values < 170) || (route.params[5] !== 'KG' && values > 30 * 0.453592 && values < 170 * 0.453592)) {
+                            if ((route.params[5] === 'KG' && values > 30 && values < 170) || (route.params[5] !== 'KG' && values > 30 / 0.453592 && values < 170 / 0.453592)) {
                                 const response = await SaveProfile(values, ...route.params);
                                 if (response) {
                                     navigation.push('dashboardTab');

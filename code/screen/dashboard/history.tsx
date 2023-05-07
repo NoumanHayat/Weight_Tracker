@@ -2,7 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { GRADIENTS, COLORS } from '../../../constants';
@@ -11,8 +11,9 @@ import Container from '../../../components/Container';
 
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-const Log = ({ item }) => {
-    if (item % 2 == 0) {
+import { useData } from '../../hooks';
+const Log = ({ item,index }) => {
+    if (item.weightChange <= 0) {
         return (
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -22,11 +23,11 @@ const Log = ({ item }) => {
                             <Entypo name="arrow-long-down" size={16} color="green" />
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontSize: 15, color: 'green' }}>165.5 lbs</Text>
-                            <Text style={{ fontSize: 15, color: 'gray' }}>28/04/2024</Text>
+                            <Text style={{ fontSize: 15, color: 'green' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                            <Text style={{ fontSize: 15, color: 'gray' }}>{item?.date}</Text>
                         </View>
                         <View style={{ marginLeft: 15 }}>
-                            <TouchableOpacity onPress={() => { alert('Ok') }}>
+                            <TouchableOpacity onPress={() => { alert(index) }}>
                                 <AntDesign name="delete" size={17} color="black" />
                             </TouchableOpacity>
                         </View>
@@ -47,11 +48,11 @@ const Log = ({ item }) => {
                             <Entypo name="arrow-long-up" size={16} color="red" />
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontSize: 15, color: 'green' }}>165.5 lbs</Text>
-                            <Text style={{ fontSize: 15, color: 'gray' }}>28/04/2024</Text>
+                            <Text style={{ fontSize: 15, color: 'red' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                            <Text style={{ fontSize: 15, color: 'gray' }}>{item?.date}</Text>
                         </View>
                         <View style={{ marginLeft: 15 }}>
-                            <TouchableOpacity onPress={() => { alert('Ok') }}>
+                            <TouchableOpacity onPress={() => { alert(index) }}>
                                 <AntDesign name="delete" size={17} color="black" />
                             </TouchableOpacity>
                         </View>
@@ -68,7 +69,15 @@ const Log = ({ item }) => {
 const Screen = ({ navigation }) => {
     const [check, setChecked] = useState(false);
     const logData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
+    const {Graph} = useData();
+    const [weightData,setWeightData] = useState();
+    useEffect(() => {
+        async function fetchData() {
+            const tempData = await Graph();
+            setWeightData(tempData);
+        }
+        fetchData();
+    }, [Graph, setWeightData]);
     return (
         <>
             <View style={{ padding: 25, backgroundColor: '#3D2645' }}>
@@ -82,8 +91,8 @@ const Screen = ({ navigation }) => {
                 </View>
             </View>
             <Container>
-                {logData.map((item, index) => (
-                    <Log key={index} item={item} />
+                {weightData?.slice(0).reverse().map((item, index) => (
+                    <Log key={index} item={item} index={index} />
                 ))}
 
             </Container></>

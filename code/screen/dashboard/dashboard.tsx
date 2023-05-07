@@ -10,9 +10,10 @@ import { useData } from '../../hooks';
 const Screen = ({ }) => {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('screen').height;
-    const { DashboardData } = useData();
+    const { DashboardData,Graph,AddWeight } = useData();
     const [Data, setData] = useState({});
     useEffect(() => {
+
         async function fetchData() {
             const tempData = await DashboardData();
             setData(tempData);
@@ -26,7 +27,7 @@ const Screen = ({ }) => {
                     <View>
                         <Text style={{ fontSize: 24, color: 'black' }}>{Data.profile ? Data?.profile?.firstName : ''}!</Text>
                     </View>
-                    <TouchableOpacity onPress={() => { DashboardData(98); }}>
+                    <TouchableOpacity onPress={() => { Graph(97) }}>
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                             <Ionicons name="add-circle" size={54} color="black" />
                             <Text style={{ fontSize: 11 }}>Add Weight</Text>

@@ -181,13 +181,6 @@ const Screen = ({ navigation }) => {
                             } else {
                                 alert('Please provide valid height');
                             }
-
-
-
-
-
-
-
                         }}
                         text="Continue"
                         style={{

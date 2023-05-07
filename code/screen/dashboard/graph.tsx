@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { Text, View, Dimensions, FlatList, TouchableHighlight, StatusBar, SafeAreaView } from 'react-native';
 import Container from '../../../components/Container';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-
+import { useData } from '../../hooks';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -24,8 +25,8 @@ import { Divider } from 'react-native-paper';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LogScreen = ({ item }) => {
-    console.log(item);
-    if (item % 2 == 0) {
+    console.log(item)
+    if (item.weightChange > 0) {
         return (
 
             <View>
@@ -35,8 +36,8 @@ const LogScreen = ({ item }) => {
                         <Entypo name="arrow-long-up" size={18} color="red" />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                        <Text style={{ fontSize: 17, color: 'red' }}>165.5 lbs</Text>
-                        <Text style={{ fontSize: 17, color: 'gray' }}>28/04/2024</Text>
+                        <Text style={{ fontSize: 17, color: 'red' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                        <Text style={{ fontSize: 17, color: 'gray' }}>{item?.date}</Text>
                     </View>
                 </View>
                 <View style={{ margin: 20 }} >
@@ -54,8 +55,8 @@ const LogScreen = ({ item }) => {
                         <Entypo name="arrow-long-down" size={18} color="green" />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                        <Text style={{ fontSize: 17, color: 'green' }}>165.5 lbs</Text>
-                        <Text style={{ fontSize: 17, color: 'gray' }}>28/04/2024</Text>
+                        <Text style={{ fontSize: 17, color: 'green' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                        <Text style={{ fontSize: 17, color: 'gray' }}>{item?.date}</Text>
                     </View>
                 </View>
                 <View style={{ margin: 20 }} >
@@ -69,18 +70,18 @@ const LogScreen = ({ item }) => {
 const Screen = ({ }) => {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('screen').height;
-    const data = {
-        labels: ["1/1", "2/1", "3/1", "4/1", "5/1", "6/1", "7/1", "8/1", "9/1", "4/1", "5/1", "6/1"],
+    const {Graph} = useData();
+    const [data,setData] = useState({
+        labels: ["1/1", "2/1", ],
         datasets: [
             {
-                data: [20, 45, 28, 80, 99, 43, 20, 45, 28, 80, 99, 43],
+                data: [20, 45],
                 color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
                 strokeWidth: 2 // optional
             }
         ],
         legend: ["Weight Locked"] // optional
-    };
-    const log = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    });
     const chartConfig = {
         backgroundGradientFrom: "#DF9BDF",
         backgroundGradientFromOpacity: 0,
@@ -91,6 +92,31 @@ const Screen = ({ }) => {
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
     };
+    const [weightData,setWeightData] = useState();
+    useEffect(() => {
+        async function fetchData() {
+            const tempData = await Graph();
+            setWeightData(tempData);
+            setData(
+                {
+                    labels: tempData.map((e)=>{
+                        return e.date.slice(5,10)
+                    }),
+                    datasets: [
+                        {
+                            data: tempData.map((e)=>{
+                                return e.weight
+                            }),
+                            color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+                            strokeWidth: 2 // optional
+                        }
+                    ],
+                    legend: ["Weight Locked"] // optional
+                }
+            )
+        }
+        fetchData();
+    }, [setWeightData]);
     return (
         <Container>
 
@@ -116,7 +142,7 @@ const Screen = ({ }) => {
                     <View style={{paddingVertical:15}}>
                         <Text style={{fontSize:24,color:'black'}}>Weight Log</Text>
                     </View>
-                    {log.map((item, index) => (
+                    {weightData?.slice(0).reverse().slice(0,15).map((item, index) => (
                         <LogScreen key={index} item={item} />
                     ))}
                 </View>

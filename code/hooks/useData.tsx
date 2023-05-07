@@ -93,8 +93,9 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     return { profileData, weightLogData };
   };
-  const AddWeight = async NewWeight => {
+  const AddWeight = async (NewWeight,heightScale) => {
     const d = new Date().toISOString();
+    console.log('working');
     let Data = [];
     try {
       const myArray = await AsyncStorage.getItem('weightLog');
@@ -203,12 +204,25 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     }
     // const bmi =kg/m2;
 
-    console.log(response)
     return response;
+  };
+  const Graph =async () => {
+    let profile = await getProfile();
+    let res=[];
+    if(profile?.profileData.weightScale == 'KG'){
+      res=profile?.weightLogData.map((e)=>{
+        return ({"date": e.date, "weight": parseInt(e.weight* 0.453592), "weightChange": e.weightChange* 2})
+      })
+    }else{
+      res=profile?.weightLogData;
+    }
+    return res;
   };
   const contextValue = {
     SaveProfile,
     DashboardData,
+    Graph,
+    AddWeight,
   };
   return (
     <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>

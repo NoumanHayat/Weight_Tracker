@@ -11,6 +11,7 @@ import {
   StyleSheet,
   TextInputProps,
   KeyboardTypeOptions,
+  ViewStyle,
 } from 'react-native';
 import { COLORS } from '../constants';
 // 'Feather.ttf','Entypo.ttf','FontAwesome5.ttf','.ttf','FontAwesome5.ttf'
@@ -22,6 +23,7 @@ interface Props {
   icon?: any | undefined;
   setValue?: any | undefined;
   onChange?: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+  inputStyles: any | undefined;
 }
 
 export default function AppInput({
@@ -32,6 +34,7 @@ export default function AppInput({
   onChangeText,
   icon,
   setValue,
+  inputStyles,
 }: Props) {
   return (
     <View style={styles.textBoxSign}>
@@ -56,6 +59,7 @@ export default function AppInput({
           marginLeft: 2,
           color: 'gray',
           paddingBottom: 7,
+          ...inputStyles,
         }}
       />
     </View>

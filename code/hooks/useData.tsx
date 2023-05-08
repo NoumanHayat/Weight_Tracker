@@ -93,35 +93,70 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     return { profileData, weightLogData };
   };
-  const AddWeight = async (NewWeight,heightScale) => {
-    const d = new Date().toISOString();
-    console.log('working');
-    let Data = [];
-    try {
-      const myArray = await AsyncStorage.getItem('weightLog');
-      if (myArray !== null) {
-        // We have data!!
-        Data = JSON.parse(myArray);
-      } else {
-        console.log('Error');
+  const AddWeight = async (NewWeight, heightScale) => {
+    console.log('Working');
+    console.log(heightScale);
+    if (heightScale === 'pound') {
+      const d = new Date().toISOString();
+      console.log('working');
+      let Data = [];
+      try {
+        const myArray = await AsyncStorage.getItem('weightLog');
+        if (myArray !== null) {
+          // We have data!!
+          Data = JSON.parse(myArray);
+        } else {
+          console.log('Error');
+        }
+      } catch (error) {
+        // Error retrieving data
+        console.log('Error retrieving data');
       }
-    } catch (error) {
-      // Error retrieving data
-      console.log('Error retrieving data');
-    }
 
-    let weightChange = NewWeight - Data[Data.length - 1].weight;
-    Data.push({
-      weight: NewWeight,
-      weightChange: weightChange,
-      date: d.slice(0, 10),
-    });
+      let weightChange = NewWeight - Data[Data.length - 1].weight;
+      Data.push({
+        weight: NewWeight,
+        weightChange: weightChange,
+        date: d.slice(0, 10),
+      });
 
-    try {
-      await AsyncStorage.setItem('weightLog', JSON.stringify(Data));
-    } catch (error) {
-      // Error saving data
-      console.log('Error saving data');
+      try {
+        await AsyncStorage.setItem('weightLog', JSON.stringify(Data));
+      } catch (error) {
+        // Error saving data
+        console.log('Error saving data');
+      }
+    } else {
+      let kgNewWeight=NewWeight/0.453592;
+      const d = new Date().toISOString();
+      console.log('working');
+      let Data = [];
+      try {
+        const myArray = await AsyncStorage.getItem('weightLog');
+        if (myArray !== null) {
+          // We have data!!
+          Data = JSON.parse(myArray);
+        } else {
+          console.log('Error');
+        }
+      } catch (error) {
+        // Error retrieving data
+        console.log('Error retrieving data');
+      }
+
+      let weightChange = kgNewWeight - Data[Data.length - 1].weight;
+      Data.push({
+        weight: kgNewWeight ,
+        weightChange: weightChange ,
+        date: d.slice(0, 10),
+      });
+
+      try {
+        await AsyncStorage.setItem('weightLog', JSON.stringify(Data));
+      } catch (error) {
+        // Error saving data
+        console.log('Error saving data');
+      }
     }
   };
   const DashboardData = async () => {
@@ -184,10 +219,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
           down: parseInt(suggestedWeightStart * 0.453592),
           up: parseInt(suggestedWeightEnd * 0.453592)
         },
-        latestWeightLog:  {"date": latestWeightLog.Date, "weight": parseInt(latestWeightLog.weight* 0.453592), "weightChange": 0},
+        latestWeightLog: { "date": latestWeightLog.Date, "weight": parseInt(latestWeightLog.weight * 0.453592), "weightChange": 0 },
         // profile: profile?.profileData,
-        profile: {"TargetWeight": parseInt(profile?.profileData.TargetWeight* 0.453592), "age": "24", "firstName": "Nouman", "gender": "Male", "height": "68", "heightScale": "Inches", "initialWeight": parseInt(profile?.profileData.initialWeight* 0.453592), "lastName": "Hayat", "weightScale": "KG"},
-        weightChange: parseInt(weightChange* 0.453592),
+        profile: { "TargetWeight": parseInt(profile?.profileData.TargetWeight * 0.453592), "age": "24", "firstName": "Nouman", "gender": "Male", "height": "68", "heightScale": "Inches", "initialWeight": parseInt(profile?.profileData.initialWeight * 0.453592), "lastName": "Hayat", "weightScale": "KG" },
+        weightChange: parseInt(weightChange * 0.453592),
       }
     } else {
       response = {
@@ -206,15 +241,15 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     return response;
   };
-  const Graph =async () => {
+  const Graph = async () => {
     let profile = await getProfile();
-    let res=[];
-    if(profile?.profileData.weightScale == 'KG'){
-      res=profile?.weightLogData.map((e)=>{
-        return ({"date": e.date, "weight": parseInt(e.weight* 0.453592), "weightChange": e.weightChange* 2})
+    let res = [];
+    if (profile?.profileData.weightScale == 'KG') {
+      res = profile?.weightLogData.map((e) => {
+        return ({ "date": e.date, "weight": parseInt(e.weight * 0.453592), "weightChange": e.weightChange * 2 })
       })
-    }else{
-      res=profile?.weightLogData;
+    } else {
+      res = profile?.weightLogData;
     }
     return res;
   };

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 import React, {ReactNode} from 'react';
@@ -57,7 +58,7 @@ export default function ModalLayout({
             />
           </TouchableOpacity>
         </View>
-        <View style={{alignItems: 'center', ...centerStyle}}>{children}</View>
+        <View style={{}}>{children}</View>
       </View>
     </View>
   );

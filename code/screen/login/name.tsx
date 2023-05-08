@@ -91,7 +91,7 @@ const Screen = ({ navigation }) => {
                     } else {
                         alert('Please Enter Number Only');
                     }
-                }} defaultValue={"age"} />
+                } } defaultValue={"age"} inputStyles={undefined} />
                 <Text style={styles.titleTwo}>Select Height Scale</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -137,11 +137,11 @@ const Screen = ({ navigation }) => {
                 <Text style={styles.titleTwo}>Height</Text>
                 <AppInputNumber onChangeText={e => {
                     setHeight(e);
-                }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in ' + heightScale} />
+                } } icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Height in ' + heightScale} inputStyles={undefined} />
                 <Text style={styles.titleTwo}>Weight</Text>
                 <AppInputNumber onChangeText={e => {
                     setWeight(e);
-                }} icon={<MaterialCommunityIcons name="weight" size={24} color="black" />} defaultValue={'Weight in ' + weightScale} />
+                } } icon={<MaterialCommunityIcons name="weight" size={24} color="black" />} defaultValue={'Weight in ' + weightScale} inputStyles={undefined} />
 
                 <Text style={styles.titleTwo}>Gender</Text>
                 <View>

@@ -43,6 +43,7 @@ export default function AppInput({
         placeholder={defaultValue}
         placeholderTextColor="gray"
         autoCapitalize={'none'}
+        onChangeText={onChangeText}
         style={{
           flex: 1,
           height: 'auto',

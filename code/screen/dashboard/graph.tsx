@@ -24,8 +24,7 @@ import { Divider } from 'react-native-paper';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const LogScreen = ({ item }) => {
-    console.log(item)
+const LogScreen = ({ item,scale }) => {
     if (item.weightChange > 0) {
         return (
 
@@ -36,7 +35,7 @@ const LogScreen = ({ item }) => {
                         <Entypo name="arrow-long-up" size={18} color="red" />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                        <Text style={{ fontSize: 17, color: 'red' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                        <Text style={{ fontSize: 17, color: 'red' }}>{item?.weight} {scale?scale:'KG'}</Text>
                         <Text style={{ fontSize: 17, color: 'gray' }}>{item?.date}</Text>
                     </View>
                 </View>
@@ -55,7 +54,7 @@ const LogScreen = ({ item }) => {
                         <Entypo name="arrow-long-down" size={18} color="green" />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                        <Text style={{ fontSize: 17, color: 'green' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                        <Text style={{ fontSize: 17, color: 'green' }}>{item?.weight} {scale?scale:'KG'}</Text>
                         <Text style={{ fontSize: 17, color: 'gray' }}>{item?.date}</Text>
                     </View>
                 </View>
@@ -99,13 +98,16 @@ const Screen = ({ }) => {
             setWeightData(tempData);
             setData(
                 {
-                    labels: tempData.map((e)=>{
+                    labels: tempData.weightLogData.slice(-10).map((e)=>{
+                        console.log(e)
                         return e.date.slice(5,10)
                     }),
                     datasets: [
                         {
-                            data: tempData.map((e)=>{
-                                return e.weight
+                            // data: [20],
+                            data: tempData.weightLogData.slice(-10).map((e)=>{
+
+                                return parseInt( e.weight)
                             }),
                             color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
                             strokeWidth: 2 // optional
@@ -114,6 +116,7 @@ const Screen = ({ }) => {
                     legend: ["Weight Locked"] // optional
                 }
             )
+            // console.log('a');
         }
         fetchData();
     }, [setWeightData]);
@@ -142,8 +145,8 @@ const Screen = ({ }) => {
                     <View style={{paddingVertical:15}}>
                         <Text style={{fontSize:24,color:'black'}}>Weight Log</Text>
                     </View>
-                    {weightData?.slice(0).reverse().slice(0,15).map((item, index) => (
-                        <LogScreen key={index} item={item} />
+                    {weightData?.weightLogData.slice(0).reverse().slice(0,15).map((item, index) => (
+                        <LogScreen key={index} item={item} scale={weightData.weightScale} />
                     ))}
                 </View>
             </View>

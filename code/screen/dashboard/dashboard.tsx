@@ -13,7 +13,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { images, COLORS, icons } from '../../../constants';
 import AppButton from '../../../components/AppButton';
 
-const Screen = ({ }) => {
+const Screen = ({navigation }) => {
     let width = Dimensions.get('window').width;
     let heightScreen = Dimensions.get('screen').height;
     const { DashboardData, Graph, AddWeight } = useData();
@@ -140,12 +140,10 @@ const Screen = ({ }) => {
                                         console.log('Press');
                                         await AddWeight(weight, weightScale);
                                         console.log('Weight Added');
-                                        await refresh();
-                                        setaddeightVisible(false);
+                                        navigation.push('dashboardTab');
                                     } else {
                                         alert('Please provide Volid !')
                                     }
-
                                 }}
                                 text="Continue"
                                 style={{

@@ -2,7 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { GRADIENTS, COLORS } from '../../../constants';
@@ -12,7 +12,10 @@ import Container from '../../../components/Container';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useData } from '../../hooks';
-const Log = ({ item,index }) => {
+import { Alert } from 'react-native';
+
+const Log = ({ item, index ,navigation,scale  }) => {
+    const { ClearOne } = useData();
     if (item.weightChange <= 0) {
         return (
             <View style={styles.centeredView}>
@@ -23,11 +26,19 @@ const Log = ({ item,index }) => {
                             <Entypo name="arrow-long-down" size={16} color="green" />
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontSize: 15, color: 'green' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                            <Text style={{ fontSize: 15, color: 'green' }}>{item?.weight} {scale?scale:'KG'}</Text>
                             <Text style={{ fontSize: 15, color: 'gray' }}>{item?.date}</Text>
                         </View>
                         <View style={{ marginLeft: 15 }}>
-                            <TouchableOpacity onPress={() => { alert(index) }}>
+                            <TouchableOpacity onPress={async () => {
+                                let a = await ClearOne(index);
+                                if (!a) {
+                                    Alert.alert('at least one log is needed');
+                                    
+                                }else{
+                                    navigation.push('dashboardTab')
+                                }
+                            }}>
                                 <AntDesign name="delete" size={17} color="black" />
                             </TouchableOpacity>
                         </View>
@@ -48,11 +59,11 @@ const Log = ({ item,index }) => {
                             <Entypo name="arrow-long-up" size={16} color="red" />
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontSize: 15, color: 'red' }}>{item?.weight} {item?.weightScale?item?.weightScale:'KG'}</Text>
+                            <Text style={{ fontSize: 15, color: 'red' }}>{item?.weight} {scale?scale:'KG'}</Text>
                             <Text style={{ fontSize: 15, color: 'gray' }}>{item?.date}</Text>
                         </View>
                         <View style={{ marginLeft: 15 }}>
-                            <TouchableOpacity onPress={() => { alert(index) }}>
+                            <TouchableOpacity onPress={() => { ClearOne(index) }}>
                                 <AntDesign name="delete" size={17} color="black" />
                             </TouchableOpacity>
                         </View>
@@ -69,8 +80,8 @@ const Log = ({ item,index }) => {
 const Screen = ({ navigation }) => {
     const [check, setChecked] = useState(false);
     const logData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const {Graph} = useData();
-    const [weightData,setWeightData] = useState();
+    const { Graph, ClearWeightLog, ClearOne } = useData();
+    const [weightData, setWeightData] = useState();
     useEffect(() => {
         async function fetchData() {
             const tempData = await Graph();
@@ -81,7 +92,7 @@ const Screen = ({ navigation }) => {
     return (
         <>
             <View style={{ padding: 25, backgroundColor: '#3D2645' }}>
-                <TouchableOpacity onPress={() => { alert('Ok') }}>
+                <TouchableOpacity onPress={async () => { await ClearWeightLog(); navigation.push('dashboardTab') }}>
                     <View style={{ alignItems: 'flex-end' }}>
                         <Text style={{ color: 'red', fontSize: 18 }}>Clear</Text>
                     </View>
@@ -91,8 +102,8 @@ const Screen = ({ navigation }) => {
                 </View>
             </View>
             <Container>
-                {weightData?.slice(0).reverse().map((item, index) => (
-                    <Log key={index} item={item} index={index} />
+                {weightData?.weightLogData.slice(0).reverse().map((item, index) => (
+                    <Log key={index} item={item} index={index} navigation={navigation} scale={weightData.weightScale} />
                 ))}
 
             </Container></>

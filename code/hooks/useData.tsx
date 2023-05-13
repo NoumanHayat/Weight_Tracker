@@ -7,7 +7,23 @@ export const DataContext = React.createContext({});
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   // eslint-disable-next-line react-hooks/exhaustive-deps
-
+  const Starting = async () => {
+    console.log('Starting..');
+    let weightLog = await AsyncStorage.getItem('weightLog');
+    let myProfile = await AsyncStorage.getItem('myProfile');
+    return { weightLog, myProfile }
+  }
+  const ResetApp = async () => {
+    try {
+      await AsyncStorage.removeItem('weightLog');
+      await AsyncStorage.removeItem('myProfile');
+      return true;
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+      return false;
+    }
+  }
   const SaveProfile = async (
     TargetWeight: any,
     firstName: any,
@@ -127,7 +143,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         console.log('Error saving data');
       }
     } else {
-      let kgNewWeight=NewWeight/0.453592;
+      let kgNewWeight = NewWeight / 0.453592;
       const d = new Date().toISOString();
       console.log('working');
       let Data = [];
@@ -146,8 +162,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
       let weightChange = kgNewWeight - Data[Data.length - 1].weight;
       Data.push({
-        weight: kgNewWeight ,
-        weightChange: weightChange ,
+        weight: kgNewWeight,
+        weightChange: weightChange,
         date: d.slice(0, 10),
       });
 
@@ -208,7 +224,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       weightStatus = 'Under weighted';
     }
 
-    let weightChange = profile?.profileData.initialWeight - latestWeightLog.weight
+    let weightChange = latestWeightLog.weight - profile?.profileData.initialWeight;
     let response = {};
 
     if (profile?.profileData.weightScale == 'KG') {
@@ -243,21 +259,166 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   };
   const Graph = async () => {
     let profile = await getProfile();
-    let res = [];
+    let weightLogData = [];
     if (profile?.profileData.weightScale == 'KG') {
-      res = profile?.weightLogData.map((e) => {
+      weightLogData = profile?.weightLogData.map((e) => {
         return ({ "date": e.date, "weight": parseInt(e.weight * 0.453592), "weightChange": e.weightChange * 2 })
       })
     } else {
-      res = profile?.weightLogData;
+      weightLogData = profile?.weightLogData;
     }
-    return res;
+    return {
+      weightLogData,
+      weightScale: profile?.profileData.weightScale,
+    };
   };
+  const ClearWeightLog = async () => {
+    let Data = [];
+    try {
+      const myArray = await AsyncStorage.getItem('weightLog');
+      if (myArray !== null) {
+        // We have data!!
+        Data = JSON.parse(myArray);
+      } else {
+        console.log('Error');
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log('Error retrieving data');
+    }
+
+    let lastWeight = Data[Data.length - 1];
+
+    try {
+      await AsyncStorage.setItem('weightLog', JSON.stringify([lastWeight]));
+    } catch (error) {
+      // Error saving data
+      console.log('Error saving data');
+    }
+
+  };
+  const ClearOne = async (index) => {
+    console.log(index);
+    let Data = [];
+    try {
+      const myArray = await AsyncStorage.getItem('weightLog');
+      if (myArray !== null) {
+        // We have data!!
+        Data = JSON.parse(myArray);
+      } else {
+        console.log('Error');
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log('Error retrieving data');
+    }
+    // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
+    if (Data.length === 1) {
+
+      return false;
+    } else {
+      console.log(Data[Data.length - 1 - index]);
+      let A = await Data.filter((e, indexs) => {
+        if (indexs !== Data.length - 1 - index) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      // console.log(a);
+      try {
+        await AsyncStorage.setItem('weightLog', JSON.stringify(A));
+      } catch (error) {
+      }
+      // Error saving data
+      // console.log('Error saving data');
+      return true;
+    }
+  }
+  const changeName = async (firstName, lastName) => {
+    console.log(firstName, lastName);
+    let profileData = [];
+    try {
+      const myArrayProfile = await AsyncStorage.getItem('myProfile');
+      if (myArrayProfile !== null) {
+        // We have data!!
+        profileData = JSON.parse(myArrayProfile);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      // Error retrieving data
+      return null;
+    }
+
+
+    const data = {
+      TargetWeight: profileData?.TargetWeight,
+      firstName,
+      lastName,
+      height: profileData?.height,
+      age: profileData?.age,
+      heightScale: profileData?.heightScale,
+      weightScale: profileData?.weightScale,
+      gender: profileData?.gender,
+      initialWeight: profileData?.initialWeight,
+    };
+    const jsonString = JSON.stringify(data);
+    try {
+      await AsyncStorage.setItem('myProfile', jsonString);
+      return true;
+    } catch (e) {
+      return false;
+    }
+
+  }
+  const changeScale = async (heightScale, weightScale) => {
+    let profileData = [];
+    try {
+      const myArrayProfile = await AsyncStorage.getItem('myProfile');
+      if (myArrayProfile !== null) {
+        // We have data!!
+        profileData = JSON.parse(myArrayProfile);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      // Error retrieving data
+      return null;
+    }
+
+
+    const data = {
+      TargetWeight: profileData?.TargetWeight,
+      firstName: profileData?.firstName,
+      lastName: profileData?.lastName,
+      height: profileData?.height,
+      age: profileData?.age,
+      heightScale,
+      weightScale,
+      gender: profileData?.gender,
+      initialWeight: profileData?.initialWeight,
+    };
+    const jsonString = JSON.stringify(data);
+    try {
+      await AsyncStorage.setItem('myProfile', jsonString);
+      return true;
+    } catch (e) {
+      return false;
+    }
+
+  }
   const contextValue = {
     SaveProfile,
     DashboardData,
     Graph,
     AddWeight,
+    ClearWeightLog,
+    ClearOne,
+    ResetApp,
+    Starting,
+    changeName,
+    changeScale
   };
   return (
     <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>

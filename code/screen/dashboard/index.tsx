@@ -11,7 +11,7 @@ import { COLORS } from '../../../constants';
 import Dashboard from './dashboard';
 import Graph from './graph';
 import History from './history';
-import Setting from './setting';
+import Setting from './Setting';
 function HomeScreen({ route }) {
   console.log(route.name);
   return (

@@ -101,7 +101,7 @@ const Screen = ({ navigation }) => {
                             status={heightScale === 'Inches' ? 'checked' : 'unchecked'}
                             onPress={() => setHeightScale('Inches')}
                         />
-                        <Text>Inches</Text>
+                        <Text style={{color:'black',fontSize:11}}>Inches</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
@@ -110,7 +110,7 @@ const Screen = ({ navigation }) => {
                             status={heightScale === 'Cm' ? 'checked' : 'unchecked'}
                             onPress={() => setHeightScale('Cm')}
                         />
-                        <Text>Cm</Text>
+                        <Text style={{color:'black',fontSize:11}}>Cm</Text>
                     </View>
                 </View>
                 <Text style={styles.titleTwo}>Select Weight Scale</Text>
@@ -122,7 +122,7 @@ const Screen = ({ navigation }) => {
                             status={weightScale === 'pound' ? 'checked' : 'unchecked'}
                             onPress={() => setWeightScale('pound')}
                         />
-                        <Text>pound </Text>
+                        <Text style={{color:'black',fontSize:11}}>pound </Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
@@ -131,7 +131,7 @@ const Screen = ({ navigation }) => {
                             status={weightScale === 'KG' ? 'checked' : 'unchecked'}
                             onPress={() => setWeightScale('KG')}
                         />
-                        <Text>KG</Text>
+                        <Text style={{color:'black',fontSize:11}}>KG</Text>
                     </View>
                 </View>
                 <Text style={styles.titleTwo}>Height</Text>
@@ -149,14 +149,14 @@ const Screen = ({ navigation }) => {
                         setSelected={(val) => setGender(val)}
                         data={data}
                         placeholder="Male"
-                        inputStyles={{ color: 'gray' }}
-                        dropdownTextStyles={{ color: 'black' }}
+                        inputStyles={{ color: 'gray',fontSize:11 }}
+                        dropdownTextStyles={{ color: 'black',fontSize:11 }}
                         boxStyles={styles.dropdownBox}
                         save="value"
                         search={false}
                         searchPlaceholder={'Selected'}
                         arrowicon={<View >
-                            <Feather name="chevron-down" size={24} color="black" />
+                            <Feather name="chevron-down" size={15} color="black" />
                         </View>
                         }
                     />
@@ -187,7 +187,7 @@ const Screen = ({ navigation }) => {
                             width: '100%',
                             marginTop: 30,
                         }}
-                        textStyle={{ color: COLORS.white, letterSpacing: 2, fontFamily: 'Mulish-Black', fontSize: 20 }}
+                        textStyle={{ color: COLORS.white, letterSpacing: 2, fontFamily: 'Mulish-Black', fontSize: 15 }}
                     />
                 </View>
             </View>
@@ -225,7 +225,7 @@ const Screen = ({ navigation }) => {
 const styles = StyleSheet.create({
     titleTwo: {
         color: COLORS.dark,
-        fontSize: 14,
+        fontSize: 13,
         paddingTop: 15,
     },
     dropdownBox: {
@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         borderWidth: 0,
         borderColor: 'white',
+        alignItems:'center'
     },
     icons: {
         flex: 0.1, justifyContent: 'center', alignItems: 'center', margin: 10
@@ -253,8 +254,8 @@ const styles = StyleSheet.create({
         // margin: 55,
         marginTop: 0,
     },
-    hiText: { fontSize: 32, color: COLORS.dark },
-    textTwo: { fontSize: 20, color: 'gray', fontFamily: 'Mulish', marginTop: 13 },
+    hiText: { fontSize: 25, color: COLORS.dark },
+    textTwo: { fontSize: 15, color: 'gray', fontFamily: 'Mulish', marginTop: 13 },
     textBoxSignSmall: {
         flexDirection: 'row',
         height: 50,
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: COLORS.white,
         elevation: 2,
-        marginTop: 20,
+        marginTop: 10,
     }, textBoxSign: {
         flexDirection: 'row',
         height: 50,
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: COLORS.white,
         elevation: 2,
-        marginTop: 6,
+        marginTop: 0,
         marginBottom: 0,
     },
 

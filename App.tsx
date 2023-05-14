@@ -37,7 +37,7 @@ function AppStarting() {
       let response = await Starting();
       console.log(response);
       setCheck(response);
-      setGetStarted(true);
+      // setGetStarted(true);
     }
     fetchData();
   }, [Starting]);

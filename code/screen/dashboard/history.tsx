@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Touchable, TouchableOpacity,Modal } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { GRADIENTS, COLORS } from '../../../constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -13,6 +13,12 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useData } from '../../hooks';
 import { Alert } from 'react-native';
+import { FAB } from 'react-native-paper';
+import ModalLayout from '../../../components/WeightModalLayout';
+import { RadioButton } from 'react-native-paper';
+import AppInputNumber from '../../../components/AppInputNumber';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AppButton from '../../../components/AppButton';
 
 const Log = ({ item, index ,navigation,scale  }) => {
     const { ClearOne } = useData();
@@ -80,7 +86,7 @@ const Log = ({ item, index ,navigation,scale  }) => {
 const Screen = ({ navigation }) => {
     const [check, setChecked] = useState(false);
     const logData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    const { Graph, ClearWeightLog, ClearOne } = useData();
+    const { Graph, ClearWeightLog, ClearOne ,AddWeight} = useData();
     const [weightData, setWeightData] = useState();
     useEffect(() => {
         async function fetchData() {
@@ -89,6 +95,11 @@ const Screen = ({ navigation }) => {
         }
         fetchData();
     }, [Graph, setWeightData]);
+    const [addeightVisible, setaddeightVisible] = useState(false);
+    const [weight, setweight] = useState(0);
+    const [heightScale, setHeightScale] = React.useState('Cm');
+    const [weightScale, setWeightScale] = React.useState('pound');
+
     return (
         <>
             <View style={{ padding: 25, backgroundColor: '#3D2645' }}>
@@ -106,10 +117,82 @@ const Screen = ({ navigation }) => {
                     <Log key={index} item={item} index={index} navigation={navigation} scale={weightData.weightScale} />
                 ))}
 
-            </Container></>
+            </Container>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={addeightVisible}
+                onRequestClose={() => setaddeightVisible(!addeightVisible)}
+            >
+                <ModalLayout bodyStyle={{ backgroundColor: '#E5C6FF' }} centerStyle={{ alignItems: 'flex-start' }} onClose={() => setaddeightVisible(!addeightVisible)}>
+                    <View style={{}}>
+                        <Text style={styles.titleTwo}>Weight</Text>
+                        <AppInputNumber onChangeText={e => {
+                            setweight(e);
+                        }} icon={<MaterialIcons name="height" size={24} color="black" />} defaultValue={'Weight in ' + weightScale} inputStyles={undefined} />
+                        <Text style={styles.titleTwo}>Select Weight Scale</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+                                <RadioButton
+                                    value="pound"
+                                    status={weightScale === 'pound' ? 'checked' : 'unchecked'}
+                                    onPress={() => setWeightScale('pound')}
+                                />
+                                <Text style={{color:'black'}}>pound </Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+                                <RadioButton
+                                    value="KG"
+                                    status={weightScale === 'KG' ? 'checked' : 'unchecked'}
+                                    onPress={() => setWeightScale('KG')}
+                                />
+                                <Text style={{color:'black'}}>KG</Text>
+                            </View>
+                        </View>
+
+                        <View style={{ justifyContent: 'center', alignItems: 'center' }} >
+                            <AppButton
+                                onPress={async () => {
+                                    if ((weightScale === 'KG' && weight > 30 && weight < 170) || (weightScale !== 'KG' && weight > 30 / 0.453592 && weight < 170 / 0.453592)) {
+                                        console.log('Press');
+                                        await AddWeight(weight, weightScale);
+                                        console.log('Weight Added');
+                                        navigation.push('dashboardTab');
+                                    } else {
+                                        alert('Please provide Volid !')
+                                    }
+                                }}
+                                text="Continue"
+                                style={{
+                                    width: '100%',
+                                    marginTop: 30,
+                                }}
+                                textStyle={{ color: COLORS.white, letterSpacing: 2, fontFamily: 'Mulish-Black', fontSize: 20 }}
+                            />
+                        </View>
+                    </View>
+                </ModalLayout>
+            </Modal>
+            <FAB
+                style={{
+                    position: 'absolute',
+                    margin: 16,
+                    right: 0,
+                    bottom: 0,
+                }}
+                small
+                icon="plus"
+                onPress={() => {setaddeightVisible(true)}} /></>
     );
 };
 const styles = StyleSheet.create({
+    titleTwo: {
+        color: COLORS.dark,
+        fontSize: 14,
+        marginTop: 15,
+    },
     container: {
         flex: 1,
         margin: 25,

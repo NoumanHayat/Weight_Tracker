@@ -84,7 +84,7 @@ const Screen = ({ navigation }) => {
                         />
                     </View>
                 </View>
-                <Text style={styles.titleTwo}>your Age (ony year)</Text>
+                <Text style={styles.titleTwo}>Your Age (ony year)</Text>
                 <AppInputNumber onChangeText={e => {
                     if (e.match(/[^0-9]/g) === null) {
                         setSelected(e);

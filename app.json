@@ -1,4 +1,7 @@
 {
   "name": "weight_and_bmi_tracker",
-  "displayName": "weight_and_bmi_tracker"
+  "displayName": "weight_and_bmi_tracker",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-3079210464435975~6379887466"
+  }
 }

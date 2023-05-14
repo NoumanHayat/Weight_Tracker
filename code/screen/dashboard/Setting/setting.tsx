@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, Image, Dimensions, FlatList, TouchableHighlight, StatusBar, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Container from '../../../../components/Container';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -23,9 +23,41 @@ import { Divider } from 'react-native-paper';
 import ScreenHader from '../../../../components/ScreenHader';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useData } from '../../../hooks';
-
+import {
+    InterstitialAd,
+    TestIds,
+    AdEventType,
+    BannerAd,
+    BannerAdSize,
+} from 'react-native-google-mobile-ads';
+const adUnitId = 'ca-app-pub-3079210464435975/5326714144';
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+    requestNonPersonalizedAdsOnly: false,
+});
 const Screen = ({ navigation }) => {
+
     const { ResetApp } = useData();
+    const unsubscribe = interstitial.addAdEventListener(
+        AdEventType.LOADED,
+        () => {
+            interstitial.show();
+        },
+    );
+    // Start loading the interstitial straight away
+    interstitial.load();
+    // useEffect(() => {
+    //     console.log('-----------------------');
+    //     const unsubscribe = interstitial.addAdEventListener(
+    //         AdEventType.LOADED,
+    //         () => {
+    //             interstitial.show();
+    //         },
+    //     );
+    //     // Start loading the interstitial straight away
+    //     interstitial.load();
+    //     // Unsubscribe from events on unmount
+    //     return unsubscribe;
+    // }, []);
     return (
         <Container>
             <View>
@@ -52,7 +84,8 @@ const Screen = ({ navigation }) => {
                             <View style={styles.modalView}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Ionicons name="person" size={18} color="gray" />
+                                        {/* <Ionicons name="scale-outline" size={18} color="gray" /> */}
+                                        <FontAwesome name="balance-scale" size={18} color="gray" />
                                         <Text style={{ color: COLORS.gray, marginLeft: 15, fontSize: 14 }}>Change Scale</Text>
                                     </View>
                                     <View >
@@ -105,6 +138,9 @@ const Screen = ({ navigation }) => {
                             </View>
                         </View>
                     </TouchableOpacity>
+                    <View style={{ marginTop: 20 }}>
+                        <BannerAd unitId={'ca-app-pub-3079210464435975/2057499074'} size={BannerAdSize.LARGE_BANNER} />
+                    </View>
                 </View>
 
             </View>

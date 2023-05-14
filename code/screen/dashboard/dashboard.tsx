@@ -12,7 +12,17 @@ import AppInputNumber from '../../../components/AppInputNumber';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { images, COLORS, icons } from '../../../constants';
 import AppButton from '../../../components/AppButton';
-
+import {
+    InterstitialAd,
+    TestIds,
+    AdEventType,
+    BannerAd,
+    BannerAdSize,
+} from 'react-native-google-mobile-ads';
+const adUnitId = 'ca-app-pub-3079210464435975/5326714144';
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+    requestNonPersonalizedAdsOnly: false,
+});
 const Screen = ({navigation }) => {
     let width = Dimensions.get('window').width;
     let heightScreen = Dimensions.get('screen').height;
@@ -29,7 +39,15 @@ const Screen = ({navigation }) => {
             setData(tempData);
         }
         fetchData();
-    }, [setData]);
+        const unsubscribe = interstitial.addAdEventListener(
+            AdEventType.LOADED,
+            () => {
+                interstitial.show();
+            },
+        );
+        // Start loading the interstitial straight away
+        interstitial.load();
+    }, [DashboardData, setData]);
     function alert(arg0: string) {
         throw new Error('Function not implemented.');
     }
@@ -38,17 +56,31 @@ const Screen = ({navigation }) => {
             setData(tempData);
     }
 
+    // useEffect(() => {
+    //     console.log('-----------------------');
+        // const unsubscribe = interstitial.addAdEventListener(
+        //     AdEventType.LOADED,
+        //     () => {
+        //         interstitial.show();
+        //     },
+        // );
+        // // Start loading the interstitial straight away
+        // interstitial.load();
+    //     // Unsubscribe from events on unmount
+    //     return unsubscribe;
+    // }, []);
+
     return (
         <Container>
             <View style={{}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View>
-                        <Text style={{ fontSize: 24, color: 'black' }}>{Data.profile ? Data?.profile?.firstName : ''}!</Text>
+                        <Text style={{ fontSize: 16, color: 'black' }}>{Data.profile ? Data?.profile?.firstName : ''}!</Text>
                     </View>
                     <TouchableOpacity onPress={() => { setaddeightVisible(true) }}>
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Ionicons name="add-circle" size={54} color="black" />
-                            <Text style={{ fontSize: 11 }}>Add Weight</Text>
+                            <Ionicons name="add-circle" size={40} color="black" />
+                            <Text style={{ fontSize: 11,color:'black' }}>Add Weight</Text>
                             {/* <Text style={{color:'black'}}>Add Weight</Text> */}
                         </View>
                     </TouchableOpacity>
@@ -69,8 +101,8 @@ const Screen = ({navigation }) => {
                     </View>
                 </View>
                 <View style={{ marginTop: '12%', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ borderRadius: 360, borderColor: '#DF9BDF', height: heightScreen / 3.2, width: width / 1.4, borderWidth: 25, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 35 }}>{Data.profile ? parseInt(Data.latestWeightLog.weight) : 0} {Data.profile ? Data.profile.weightScale : 'KG'}</Text>
+                    <View style={{ borderRadius: 360, borderColor: '#DF9BDF', height: heightScreen / 4, width: width /1.7, borderWidth: 25, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 20 }}>{Data.profile ? parseInt(Data.latestWeightLog.weight) : 0} {Data.profile ? Data.profile.weightScale : 'KG'}</Text>
                     </View>
                 </View>
                 <View style={{ marginTop: '12%', justifyContent: 'center', alignItems: 'center' }}>
@@ -120,7 +152,7 @@ const Screen = ({navigation }) => {
                                     status={weightScale === 'pound' ? 'checked' : 'unchecked'}
                                     onPress={() => setWeightScale('pound')}
                                 />
-                                <Text>pound </Text>
+                                <Text style={{color:'black'}}>pound </Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
@@ -129,7 +161,7 @@ const Screen = ({navigation }) => {
                                     status={weightScale === 'KG' ? 'checked' : 'unchecked'}
                                     onPress={() => setWeightScale('KG')}
                                 />
-                                <Text>KG</Text>
+                                <Text style={{color:'black'}}>KG</Text>
                             </View>
                         </View>
 

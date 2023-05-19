@@ -30,21 +30,21 @@ import {
     BannerAd,
     BannerAdSize,
 } from 'react-native-google-mobile-ads';
-const adUnitId = 'ca-app-pub-3079210464435975/5326714144';
-const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
-    requestNonPersonalizedAdsOnly: false,
-});
+// const adUnitId = 'ca-app-pub-3079210464435975/5326714144';
+// const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+//     requestNonPersonalizedAdsOnly: false,
+// });
 const Screen = ({ navigation }) => {
 
     const { ResetApp } = useData();
-    const unsubscribe = interstitial.addAdEventListener(
-        AdEventType.LOADED,
-        () => {
-            interstitial.show();
-        },
-    );
-    // Start loading the interstitial straight away
-    interstitial.load();
+    // const unsubscribe = interstitial.addAdEventListener(
+    //     AdEventType.LOADED,
+    //     () => {
+    //         interstitial.show();
+    //     },
+    // );
+    // // Start loading the interstitial straight away
+    // interstitial.load();
     // useEffect(() => {
     //     console.log('-----------------------');
     //     const unsubscribe = interstitial.addAdEventListener(
@@ -138,9 +138,9 @@ const Screen = ({ navigation }) => {
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <View style={{ marginTop: 20 }}>
+                    {/* <View style={{ marginTop: 20 }}>
                         <BannerAd unitId={'ca-app-pub-3079210464435975/2057499074'} size={BannerAdSize.LARGE_BANNER} />
-                    </View>
+                    </View> */}
                 </View>
 
             </View>

@@ -47,7 +47,7 @@ const LogScreen = ({ item, scale }) => {
                         <Entypo name="arrow-long-up" size={15} color="red" />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                        <Text style={{ fontSize: 15, color: 'red' }}>{item?.weight} {scale ? scale : 'KG'}</Text>
+                        <Text style={{ fontSize: 15, color: 'red' }}>{parseInt(item?.weight)} {scale ? scale : 'KG'}</Text>
                         <Text style={{ fontSize: 14, color: 'gray' }}>{item?.date}</Text>
                     </View>
                 </View>
@@ -66,7 +66,7 @@ const LogScreen = ({ item, scale }) => {
                         <Entypo name="arrow-long-down" size={15} color="green" />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                        <Text style={{ fontSize: 15, color: 'green' }}>{item?.weight} {scale ? scale : 'KG'}</Text>
+                        <Text style={{ fontSize: 15, color: 'green' }}>{parseInt(item?.weight)} {scale ? scale : 'KG'}</Text>
                         <Text style={{ fontSize: 14, color: 'gray' }}>{item?.date}</Text>
                     </View>
                 </View>
@@ -156,9 +156,9 @@ const Screen = ({ navigation }) => {
                             borderRadius: 16,
                         }} />
                 </View>
-                <View style={{ marginTop: 20 }}>
+                {/* <View style={{ marginTop: 20 }}>
                         <BannerAd unitId={'ca-app-pub-3079210464435975/2057499074'} size={BannerAdSize.LARGE_BANNER} />
-                    </View>
+                    </View> */}
                 <View style={{ marginTop: '10%', height: "100%" }}>
                     <View style={{ paddingVertical: 15 }}>
                         <Text style={{ fontSize: 18, color: 'black' }}>Weight Log</Text>
@@ -210,6 +210,7 @@ const Screen = ({ navigation }) => {
                                 onPress={async () => {
                                     if ((weightScale === 'KG' && weight > 30 && weight < 170) || (weightScale !== 'KG' && weight > 30 / 0.453592 && weight < 170 / 0.453592)) {
                                         console.log('Press');
+                                        setaddeightVisible(false);
                                         await AddWeight(weight, weightScale);
                                         console.log('Weight Added');
                                         navigation.push('dashboardTab');

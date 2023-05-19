@@ -25,6 +25,8 @@ import dashboardTab from './code/screen/dashboard';
 import TargetWeight from './code/screen/login/targetWeight';
 import ChangePersonalInfo from './code/screen/dashboard/changePersonalInfo';
 import { DataProvider } from './code/hooks';
+import SplashScreen from 'react-native-splash-screen';
+
 const Stack = createNativeStackNavigator();
 import { useData } from './code/hooks';
 import StartingScreen from './code/screen/StartingScreen';
@@ -33,11 +35,12 @@ function AppStarting() {
   const [getStarted, setGetStarted] = useState(false);
   const [check, setCheck] = useState({ weightLog: null, myProfile: null });
   useEffect(() => {
+    SplashScreen.hide();
     async function fetchData() {
       let response = await Starting();
       console.log(response);
       setCheck(response);
-      // setGetStarted(true);
+      setGetStarted(true);
     }
     fetchData();
   }, [Starting]);

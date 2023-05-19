@@ -32,7 +32,7 @@ const Log = ({ item, index ,navigation,scale  }) => {
                             <Entypo name="arrow-long-down" size={16} color="green" />
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontSize: 15, color: 'green' }}>{item?.weight} {scale?scale:'KG'}</Text>
+                            <Text style={{ fontSize: 15, color: 'green' }}>{parseInt(item?.weight)} {scale?scale:'KG'}</Text>
                             <Text style={{ fontSize: 15, color: 'gray' }}>{item?.date}</Text>
                         </View>
                         <View style={{ marginLeft: 15 }}>
@@ -65,7 +65,7 @@ const Log = ({ item, index ,navigation,scale  }) => {
                             <Entypo name="arrow-long-up" size={16} color="red" />
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-                            <Text style={{ fontSize: 15, color: 'red' }}>{item?.weight} {scale?scale:'KG'}</Text>
+                            <Text style={{ fontSize: 15, color: 'red' }}>{parseInt(item?.weight)} {scale?scale:'KG'}</Text>
                             <Text style={{ fontSize: 15, color: 'gray' }}>{item?.date}</Text>
                         </View>
                         <View style={{ marginLeft: 15 }}>
@@ -157,6 +157,7 @@ const Screen = ({ navigation }) => {
                                 onPress={async () => {
                                     if ((weightScale === 'KG' && weight > 30 && weight < 170) || (weightScale !== 'KG' && weight > 30 / 0.453592 && weight < 170 / 0.453592)) {
                                         console.log('Press');
+                                        setaddeightVisible(false)
                                         await AddWeight(weight, weightScale);
                                         console.log('Weight Added');
                                         navigation.push('dashboardTab');

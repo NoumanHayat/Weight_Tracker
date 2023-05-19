@@ -88,7 +88,7 @@ const Screen = ({navigation }) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: '10%', flex: 1 }}>
                     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 0.33, backgroundColor: '#DF9BDF', padding: 10, borderRadius: 15 }}>
                         <Text style={{ fontSize: 11, color: 'black' }}>Weight Change!</Text>
-                        <Text style={{ fontSize: 11, color: 'blue' }}>{Data.profile ? Data.weightChange : 0}</Text>
+                        <Text style={{ fontSize: 11, color: 'blue' }}>{Data.profile ? parseInt(Data.weightChange) : 0}</Text>
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 0.33 }}>
                         {/* <Ionicons name="add-circle" size={54} color="black" /> */}

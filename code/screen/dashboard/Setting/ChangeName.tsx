@@ -26,18 +26,22 @@ const Screen = ({ navigation }) => {
             <ScreenHeader navigation={navigation} title={'Name Change'} />
             <View style={styles.container}>
                 <View>
-                    
+
                     <Text style={{ ...styles.title, marginTop: 23 }}>New Name</Text>
                     <View>
-                        <AppInput onChangeText={(e: React.SetStateAction<string>)=>{setFirstName(e);console.log(e)}} defaultValue={"First Name"} />
-                        <AppInput onChangeText={(e: React.SetStateAction<string>)=>{setLastName(e)}} defaultValue={"Last Name"} />
+                        <AppInput onChangeText={(e: React.SetStateAction<string>) => { setFirstName(e); console.log(e) }} defaultValue={"First Name"} />
+                        <AppInput onChangeText={(e: React.SetStateAction<string>) => { setLastName(e) }} defaultValue={"Last Name"} />
                     </View>
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }} >
                     <AppButton
-                        onPress={async () => { let response =await changeName(firstName,lastName);if(response){
-                            navigation.push('dashboardTab')
-                        }else{Alert.alert('Something went wrong')} }}
+                        onPress={async () => {
+                            let response = await changeName(firstName, lastName); 
+                            navigation.push('dashboardTab');
+                            // if (response) {
+                            //     navigation.push('dashboardTab')
+                            // } else { Alert.alert('Something went wrong') }
+                        }}
                         text="Change "
                         style={{
                             width: '100%',
